@@ -225,7 +225,7 @@ function  signatureValueChanged() {
             // Set the value from python into the CodeMirror widget in the
             // frontend.
 
-            const newDocstring = '"""' + model.get('docstring') + '"""';
+            const newDocstring = model.get('docstring');
 
             if (newDocstring !== myDocstringCodeMirror.state.doc.toString()) {
                 myDocstringCodeMirror.dispatch({
