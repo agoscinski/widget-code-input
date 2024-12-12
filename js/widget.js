@@ -44,7 +44,7 @@ export default{
             .forced-indent {width: 4em;}\
             .CodeMirror {border: 1px solid #aaa; height: auto;}\
             widget-code-input-signature {border-bottom: 0px solid #aaa;}\
-            widget-code-input-docstring {border-top: 0px solid #aaa;}\
+            //widget-code-input-docstring {border-top: 0px solid #aaa;}\
             .widget-code-input-body { border-top: 1px solid #aaa;}\
         </style>';
     
@@ -59,9 +59,9 @@ export default{
       '<textarea id="' +
       theTextareaId +
       '-signature" class="CodeMirror.widget-code-input-signature"></textarea>' +
-      '<textarea id="' +
-      theTextareaId +
-      '-docstring" class="CodeMirror.widget-code-input-docstring"></textarea>' +
+      //'<textarea id="' +
+      //theTextareaId +
+      //'-docstring" class="CodeMirror.widget-code-input-docstring"></textarea>' +
       '<textarea id="' +
       theTextareaId +
         '-body" class="CodeMirror.widget-code-input-body"></textarea>';
@@ -83,7 +83,7 @@ export default{
         var guttercomp = new Compartment; // allow dynamic changing of line numbers
 
         var theme_compartment_sig = new Compartment;
-        var theme_compartment_doc = new Compartment;
+        //var theme_compartment_doc = new Compartment;
         var theme_compartment_body = new Compartment;
         
 
@@ -116,30 +116,39 @@ export default{
 
         mySignatureCodeMirror.dom.classList.add("widget-code-input-signature")
         
-        var myDocstringCodeMirror = editorFromTextArea(document.getElementById(theTextareaId + '-docstring'), [lineNumbers(), EditorState.readOnly.of(true), EditorView.editorAttributes.of({class:"widget-code-input-docstring"}), gutter({class:"forced-indent"}), guttercomp.of(lineNumbers()),
-                                                                                                               
-      history(),
-      drawSelection(),
-      dropCursor(),
-      EditorState.allowMultipleSelections.of(true),
-      syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
-      bracketMatching(),
-      closeBrackets(),
-      autocompletion(),
-      rectangularSelection(),
-      crosshairCursor(),
-      keymap.of([
-        ...closeBracketsKeymap,
-        ...defaultKeymap,
-        ...searchKeymap,
-        ...historyKeymap,
-        ...foldKeymap,
-        ...completionKeymap,
-        ...lintKeymap,
-      ]), python(), indentUnit.of("    "), theme_compartment_doc.of(basicLight)]);
+        //var myDocstringCodeMirror = editorFromTextArea(document.getElementById(theTextareaId + '-docstring'), 
+        //  [lineNumbers(),
+        //    EditorState.readOnly.of(true),
+        //    EditorView.editorAttributes.of({class:"widget-code-input-docstring"}),
+        //    gutter({class:"forced-indent"}),
+        //    guttercomp.of(lineNumbers()),
+        //    history(),
+        //    drawSelection(),
+        //    dropCursor(),
+        //    EditorState.allowMultipleSelections.of(true),
+        //    syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
+        //    bracketMatching(),
+        //    closeBrackets(),
+        //    autocompletion(),
+        //    rectangularSelection(),
+        //    crosshairCursor(),
+        //    keymap.of([
+        //      ...closeBracketsKeymap,
+        //      ...defaultKeymap,
+        //      ...searchKeymap,
+        //      ...historyKeymap,
+        //      ...foldKeymap,
+        //      ...completionKeymap,
+        //      ...lintKeymap,
+        //    ]),
+        //    python(),
+        //    indentUnit.of("    "),
+        //    theme_compartment_doc.of(basicLight)
+        //  ]
+        //);
 
 
-        mySignatureCodeMirror.dom.classList.add("widget-code-input-signature"); // add css for border to docstring element
+        //mySignatureCodeMirror.dom.classList.add("widget-code-input-signature"); // add css for border to docstring element
         
         // event listener for changes to function body
 
@@ -206,14 +215,24 @@ function  signatureValueChanged() {
  function updateLineNumbers() {
      const linesSignature = mySignatureCodeMirror.state.doc.toString().split('\n').length;
 
-     const docstring = myDocstringCodeMirror.state.doc.toString();
-     const linesDocstring = docstring == "" ? 0 : docstring.split('\n').length;
+     const linesDocstring = 0;
+     //const docstring = myDocstringCodeMirror.state.doc.toString();
+     //const linesDocstring = docstring == "" ? 0 : docstring.split('\n').length;
+     //// changing css style seems to not work
+     ////const fixedHeightEditor = EditorView.theme({
+     ////  "&": {height: "100px"},
+     ////  ".cm-scroller": {overflow: "auto"}
+     ////})
+     ////var theme = new Compartment;
+     ////myDocstringCodeMirror.dispatch({
+     ////   effects: theme.reconfigure(fixedHeightEditor)
+     ////});
 
-     // increment line numbers in docstring text area by the number of lines in the signature
-     myDocstringCodeMirror.dispatch({
-       effects: guttercomp.reconfigure(
-         lineNumbers({ formatNumber: n=> linesDocstring == 0 ? "" : linesSignature+n }))
-     });
+     //// increment line numbers in docstring text area by the number of lines in the signature
+     //myDocstringCodeMirror.dispatch({
+     //  effects: guttercomp.reconfigure(
+     //    lineNumbers({ formatNumber: n=> linesDocstring == 0 ? "" : linesSignature+n }))
+     //});
 
      myBodyCodeMirror.dispatch({
        effects: guttercomp.reconfigure(
@@ -228,11 +247,11 @@ function  signatureValueChanged() {
 
             const newDocstring = model.get('docstring');
 
-            if (newDocstring !== myDocstringCodeMirror.state.doc.toString()) {
-                myDocstringCodeMirror.dispatch({
-  changes: {from: 0, to: myDocstringCodeMirror.state.doc.length, insert: newDocstring}
-})
-    }
+            //if (newDocstring !== myDocstringCodeMirror.state.doc.toString()) {
+            //    myDocstringCodeMirror.dispatch({
+            //       changes: {from: 0, to: myDocstringCodeMirror.state.doc.length, insert: newDocstring}
+            //     })
+            //}
    updateLineNumbers();
   }
 
@@ -270,9 +289,9 @@ function  bodyValueChanged() {
             mySignatureCodeMirror.dispatch({
                 effects: theme_compartment_sig.reconfigure(theme)
             })
-            myDocstringCodeMirror.dispatch({
-                effects: theme_compartment_doc.reconfigure(theme)
-            })
+            //myDocstringCodeMirror.dispatch({
+            //    effects: theme_compartment_doc.reconfigure(theme)
+            //})
             myBodyCodeMirror.dispatch({
                 effects: theme_compartment_body.reconfigure(theme)
             })
